@@ -1,0 +1,27 @@
+# Binarios y objetos
+editor
+pipeline_cli
+plain_writer
+*.o
+
+# Salidas de ejecucion
+out/
+samples/
+reports/raw/
+reports/*.png
+reports/figures/
+reports/summary.csv
+reports/PROFILING_REPORT.md
+reports/GRAPH_SUMMARY.md
+
+# Archivos sensibles o privados
+secret.md
+
+# Python
+__pycache__/
+*.pyc
+
+# Archivos temporales de editor/sistema
+*.log
+*.tmp
+.DS_Store
