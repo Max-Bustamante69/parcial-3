@@ -200,13 +200,27 @@ Luego revisar:
 
 > Nota: ambos participaron en pruebas integrales y documentacion final.
 
-## 10. Conclusiones (a actualizar con corrida final)
+## 10. Conclusiones finales (corrida ejecutada)
 
-Tras ejecutar `make benchmark` en Linux, se espera:
+Con base en `reports/summary.csv`, `reports/PROFILING_REPORT.md` y `reports/GRAPH_SUMMARY.md`, se obtuvo:
 
-- reduccion importante de `write()` calls frente a baseline clasico,
-- reduccion del volumen en disco en los algoritmos con mejor ratio,
-- aumento moderado de `user time` por compresion,
-- mejora neta de `real time` en combinaciones que reduzcan suficiente I/O.
+- Baseline clasico (`baseline_small_writes`):
+  - `real = 4.53s`,
+  - `write() = 11035`,
+  - ratio `1.000`.
+- Mejor rendimiento total:
+  - `pack_deflate_write` y `pack_deflate_mmap` con `real = 0.02s`.
+- Mejor relacion de compresion:
+  - `deflate` con ratio `0.084` (archivo final ~8.4% del original).
 
-La conclusion definitiva se apoya en los valores exactos de `reports/summary.csv` y `reports/PROFILING_REPORT.md`.
+Impacto cuantitativo frente al baseline:
+
+- Mejora de tiempo wall-clock: **99.56%**.
+- Reduccion de llamadas `write()`: **99.86%**.
+- Reduccion de volumen escrito a disco (caso deflate): cercana al **91.6%**.
+
+Veredicto tecnico:
+
+- Para este dataset, comprimir en user-space antes de escribir al kernel fue claramente rentable.
+- El costo extra de CPU por compresion fue bajo frente al ahorro de I/O.
+- La combinacion recomendada para entrega es **Deflate + I/O por bloques (`write`)** por simplicidad operativa y rendimiento sobresaliente; `Deflate + mmap` tambien obtuvo el mejor tiempo, por lo que ambos enfoques cumplen el objetivo de optimizacion.

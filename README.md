@@ -129,13 +129,25 @@ Esto separa metadatos del contenido y evita guardar texto claro directamente.
 valgrind --leak-check=full ./editor
 ```
 
-## 8) Que me debes compartir para cerrar el informe final
+## 8) Conclusiones finales (con reportes reales)
 
-Cuando corras en Linux, comparteme estos archivos para que te genere conclusiones finales mas precisas en el README del profesor:
+Resultados obtenidos con los reportes finales en `reports/`:
+
+- **Baseline clasico** (`plain_writer`): `real=4.53s`, `write_calls=11035`, ratio `1.0`.
+- **Mejor pipeline por tiempo**: `pack_deflate_write` con `real=0.02s`, `ratio=0.084`, `write_calls=16`.
+- **Mejora de tiempo total**: `99.56%` frente al baseline.
+- **Reduccion de llamadas a write()**: `99.86%` frente al baseline.
+- **Mejor compresion**: `deflate` (`0.084`), seguido de `lzw` (`0.162`), `huffman` (`0.596`), y `rle` (en este dataset no conviene, `1.963`).
+
+Interpretacion tecnica:
+
+- En este caso de prueba, invertir CPU en compresion (user space) redujo fuertemente el trafico de I/O.
+- Menos bytes + menos llamadas `write()` = menor costo total en tiempo wall-clock.
+- `deflate` fue el metodo mas rentable globalmente para este dataset.
+
+Evidencia exacta en:
 
 - `reports/summary.csv`
 - `reports/PROFILING_REPORT.md`
-- uno o dos `reports/raw/*.strace.txt` (baseline + mejor caso),
-- uno o dos `reports/raw/*.time.txt` (baseline + mejor caso).
-
-Con eso te puedo redactar conclusiones cuantitativas exactas (porcentajes reales de mejora).
+- `reports/GRAPH_SUMMARY.md`
+- `reports/figures/*.png`
